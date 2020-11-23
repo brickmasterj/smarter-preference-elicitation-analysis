@@ -90,9 +90,9 @@ And visit [localhost:8050](http://localhost:8050/) in the browser.
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project. -->
 
-## License
+<!-- ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details -->
 
 <!-- ## Acknowledgments
 
