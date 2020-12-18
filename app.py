@@ -28,12 +28,26 @@ try:
 except:
    attributes = format_data()
 
-# Generate Dash graphs from figures, with title in a <div>
-graphs = [graph_element(key, attribute['weight'], attribute['fig']) for key, attribute in attributes.items()]
+# Generate pie char for weights with header
+weights_labels = [k for k, v in attributes.items()]
+weights_values = [v['weight'] for k, v in attributes.items()]
+
+weights_fig = go.Figure(data=[go.Pie(labels=weights_labels,
+    values=weights_values,
+    textinfo='label+percent',
+    insidetextorientation='radial')])
+
+weights_graph = [html.Div(children=[
+    html.H2(children='Weights Pie Chart'),
+    dcc.Graph(figure=weights_fig)])]
+
+# Generate Dash graphs from figures for each attribute, with title in a <div>
+attribute_graphs = [graph_element(key, attribute['weight'], attribute['fig']) for key, attribute in attributes.items()]
 
 # Start Dash app and add the layout
 app = dash.Dash(__name__)
 
+graphs = weights_graph + attribute_graphs
 app.layout = html.Div(children=graphs)
 
 if __name__ == '__main__':

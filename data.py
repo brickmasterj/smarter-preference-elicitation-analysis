@@ -1,6 +1,8 @@
 # Convert input data into usable attributes dictionary
 import plotly.graph_objects as go
 import pandas as pd
+from weights import get_weights
+
 
 def generate_graphs(attributes):
     ''' Generate figure for each attribute in
@@ -31,9 +33,11 @@ def generate_graphs(attributes):
     return attributes
 
 
-def format_data_lighthousestudio(csv_data, csv_labels, weighing_method = 'ROC'):
+def format_data_lighthousestudio(csv_data, csv_labels, weighing_method):
     ''' Format data from Lighthouse Studio from Sawtooth Software
     '''
+    num_of_attributes = len(csv_labels)
+
     for attribute_name, attribute in csv_labels.items():
         # Generate level data
         # Initiate empty lists
@@ -51,13 +55,28 @@ def format_data_lighthousestudio(csv_data, csv_labels, weighing_method = 'ROC'):
             attribute['pos_error'].append(level_std)
             attribute['neg_error'].append(level_std)
 
-        # Generate weights
-        attribute['weight'] = 1 # TODO: REMOVE DUMMY WEIGHTs
+        # Generate rank score for attribute, see https://help.surveymonkey.com/articles/en_US/kb/How-do-I-create-a-Ranking-type-question
+        attribute_rank = 0
 
-    return csv_labels
+        for i in range(1, num_of_attributes + 1):
+            attribute_rank += csv_data['Ranking_' + str(i)].tolist().count(attribute['ranking_id']) * (num_of_attributes + 1 - i)
 
+        attribute['rank'] = attribute_rank
 
-def format_data(csv_data = None, csv_labels = None, csv_type = None, weighing_method = 'ROC'):
+    # Generate actual weights list from method
+    weights = get_weights(weighing_method, num_of_attributes)
+
+    # Sort csv_labels by highest rank and add weights into attributes by iterating
+    attributes = dict(sorted(csv_labels.items(), key=lambda k: -k[1]['rank']))
+
+    for attribute_name, attribute in attributes.items():
+        attribute['weight'] = weights[0]
+        weights.pop(0)
+
+    return attributes
+    
+
+def format_data(csv_data = None, csv_labels = None, csv_type = None, weighing_method = 'RS'):
     ''' Formated data into usable attributes dict,
     given input csv data, as well as specifying the type.
     Also given a certain weighing method.
