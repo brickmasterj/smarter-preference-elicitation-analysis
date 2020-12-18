@@ -10,6 +10,7 @@ This tool provides a simple dashboard analyse results obtained from a survey uti
 
 * Python 3
 * [Plotly Dash](https://dash.plotly.com/)
+* Pandas
 <!-- * [Pandas](https://pandas.pydata.org/) -->
 
 <!-- ### Installing
@@ -72,7 +73,15 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ### Preparing data
 
-Preparing data #TODO!
+When starting the program, it will try to load `input_data.csv` and `input_data_labels.json` files from the root directory to generate the analysis. If none are provided it will return default exmaple data.
+
+These two files contain the actual survey output data and additional labelling for the analysis respectively. The latter of which might not always be required, depending on the source.
+
+Currently implemented data sources are:
+
+* Sawtooth Software Lighthouse Studio
+
+For each of these sources, an example `input_data.csv` and `input_data_labels.json` are provided in the `example_datasets` folder. Additional requirements for each data source will also be specified there.
 
 ### Running app
 
