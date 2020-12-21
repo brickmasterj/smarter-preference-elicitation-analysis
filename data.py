@@ -18,7 +18,7 @@ def generate_graphs(attributes):
                     type='data',
                     symmetric=False,
                     array=value['pos_error'],
-                    arrayminus=value['neg_error'])))
+                    arrayminus=value['neg_error'])), layout_yaxis_range=[attributes[key]['min_value_level'], attributes[key]['max_value_level']])
         else: # it must thus be nominal
             attributes[key]['fig'] = go.Figure(data=go.Bar(
                 name=key,
@@ -28,7 +28,9 @@ def generate_graphs(attributes):
                     type='data',
                     symmetric=False,
                     array=value['pos_error'],
-                    arrayminus=value['neg_error'])))
+                    arrayminus=value['neg_error'])), layout_yaxis_range=[attributes[key]['min_value_level'], attributes[key]['max_value_level']])
+        
+        # attributes[key]['fig'].write_image('images/' + key.replace(' ', '_') + '.eps')
 
     return attributes
 
@@ -52,8 +54,16 @@ def format_data_lighthousestudio(csv_data, csv_labels, weighing_method):
             level_std = level_data.std()
 
             attribute['values'].append(level_mean)
-            attribute['pos_error'].append(level_std)
-            attribute['neg_error'].append(level_std)
+
+            if level_mean + level_std < attribute['max_value_level']:
+                attribute['pos_error'].append(level_std)
+            else:
+                attribute['pos_error'].append(attribute['max_value_level'] - level_mean)
+
+            if level_mean - level_std > attribute['min_value_level']:
+                attribute['neg_error'].append(level_std)
+            else:
+                attribute['neg_error'].append(abs(attribute['min_value_level'] - level_mean))
 
         # Generate rank score for attribute, see https://help.surveymonkey.com/articles/en_US/kb/How-do-I-create-a-Ranking-type-question
         attribute_rank = 0

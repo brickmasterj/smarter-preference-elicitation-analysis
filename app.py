@@ -37,6 +37,8 @@ weights_fig = go.Figure(data=[go.Pie(labels=weights_labels,
     textinfo='label+percent',
     insidetextorientation='radial')])
 
+# weights_fig.write_image('images/Ranks.eps')
+
 weights_graph = [html.Div(children=[
     html.H2(children='Weights Pie Chart'),
     dcc.Graph(figure=weights_fig)])]
