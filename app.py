@@ -13,7 +13,8 @@ def graph_element(key, weight, fig):
     the graph itself, the title and the weight.
     '''
     return html.Div(children=[
-        html.H2(children='{} {}'.format(key, weight)),
+        html.H2(children=key),
+        html.Div(children='Associated weight: {}'.format(str(round(weight, 5)))),
         dcc.Graph(figure=fig)])
 
 # Try if the default files are located in the root dir, otherwise initiate with example data
@@ -40,16 +41,21 @@ weights_fig = go.Figure(data=[go.Pie(labels=weights_labels,
 # weights_fig.write_image('images/Ranks.eps')
 
 weights_graph = [html.Div(children=[
-    html.H2(children='Weights Pie Chart'),
+    html.H1(children='Weights', style={'textAlign': 'center'}),
     dcc.Graph(figure=weights_fig)])]
 
 # Generate Dash graphs from figures for each attribute, with title in a <div>
 attribute_graphs = [graph_element(key, attribute['weight'], attribute['fig']) for key, attribute in attributes.items()]
 
-# Start Dash app and add the layout
-app = dash.Dash(__name__)
+# Generate overall title and attributes title
+title = [html.H1(children='SMARTER Preference Elicitation Analysis Tool', style={'textAlign': 'center'}), html.Hr()]
+title_attributes = [html.Hr(), html.H1(children='Attributes', style={'textAlign': 'center'})]
 
-graphs = weights_graph + attribute_graphs
+# Start Dash app and add the layout
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+
+graphs = title + weights_graph + title_attributes + attribute_graphs
 app.layout = html.Div(children=graphs)
 
 if __name__ == '__main__':
