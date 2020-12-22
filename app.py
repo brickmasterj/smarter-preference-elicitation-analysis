@@ -27,7 +27,7 @@ try:
 
     attributes = format_data(csv_data, csv_labels, csv_type)
 except:
-   attributes = format_data()
+    attributes = format_data()
 
 # Generate pie char for weights with header
 weights_labels = [k for k, v in attributes.items()]
@@ -42,7 +42,10 @@ weights_fig = go.Figure(data=[go.Pie(labels=weights_labels,
 
 weights_graph = [html.Div(children=[
     html.H1(children='Weights', style={'textAlign': 'center'}),
-    dcc.Graph(figure=weights_fig)])]
+    # dcc.Dropdown(options=[{'label': 'RS - Rank Sum', 'value': 'RS'},
+    #                       {'label': 'ROC - Rank Order Centroid', 'value': 'ROC'}],
+    #              value='RS', id='weights-selector'),
+    dcc.Graph(figure=weights_fig, id='weights-graph')])]
 
 # Generate Dash graphs from figures for each attribute, with title in a <div>
 attribute_graphs = [graph_element(key, attribute) for key, attribute in attributes.items()]
