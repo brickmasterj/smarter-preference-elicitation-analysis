@@ -39,6 +39,7 @@ def format_data_lighthousestudio(csv_data, csv_labels, weighing_method):
     ''' Format data from Lighthouse Studio from Sawtooth Software
     '''
     num_of_attributes = len(csv_labels)
+    attr_index = 1
 
     for attribute_name, attribute in csv_labels.items():
         # Generate level data
@@ -76,12 +77,15 @@ def format_data_lighthousestudio(csv_data, csv_labels, weighing_method):
     # Generate actual weights list from method
     weights = get_weights(weighing_method, num_of_attributes)
 
-    # Sort csv_labels by highest rank and add weights into attributes by iterating
+    # Sort csv_labels by highest rank and add weights and index into attributes by iterating
     attributes = dict(sorted(csv_labels.items(), key=lambda k: -k[1]['rank']))
 
     for attribute_name, attribute in attributes.items():
         attribute['weight'] = weights[0]
         weights.pop(0)
+
+        attribute['index'] = attr_index
+        attr_index += 1
 
     return attributes
     

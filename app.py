@@ -8,14 +8,14 @@ import pandas as pd
 from data import format_data
 
 
-def graph_element(key, weight, fig):
+def graph_element(key, attribute):
     ''' Generate a <div> element for each graph containing
     the graph itself, the title and the weight.
     '''
     return html.Div(children=[
-        html.H2(children=key),
-        html.Div(children='Associated weight: {}'.format(str(round(weight, 5)))),
-        dcc.Graph(figure=fig)])
+        html.H2(children='{}. {}'.format(attribute['index'], key)),
+        html.Div(children='Associated weight: {}'.format(str(round(attribute['weight'], 5)))),
+        dcc.Graph(figure=attribute['fig'])])
 
 # Try if the default files are located in the root dir, otherwise initiate with example data
 try:
@@ -45,7 +45,7 @@ weights_graph = [html.Div(children=[
     dcc.Graph(figure=weights_fig)])]
 
 # Generate Dash graphs from figures for each attribute, with title in a <div>
-attribute_graphs = [graph_element(key, attribute['weight'], attribute['fig']) for key, attribute in attributes.items()]
+attribute_graphs = [graph_element(key, attribute) for key, attribute in attributes.items()]
 
 # Generate overall title and attributes title
 title = [html.H1(children='SMARTER Preference Elicitation Analysis Tool', style={'textAlign': 'center'}), html.Hr()]
