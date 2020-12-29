@@ -18,7 +18,9 @@ def generate_graphs(attributes):
                     type='data',
                     symmetric=False,
                     array=value['pos_error'],
-                    arrayminus=value['neg_error'])), layout_yaxis_range=[attributes[key]['min_value_level'], attributes[key]['max_value_level']]) #, layout_margin=dict(l=50, r=50, t=50, b=50))
+                    arrayminus=value['neg_error'])), layout_yaxis_range=[attributes[key]['min_value_level'], attributes[key]['max_value_level']], layout_margin=dict(l=0, r=0, t=50, b=0), layout_font={'size': 22})
+            attributes[key]['fig'].update_xaxes(title_text = attributes[key]['x_label'], title_font = {'size': 22})
+            attributes[key]['fig'].update_yaxes(title_text = 'Likelihood', title_font = {'size': 22})
         else: # it must thus be nominal
             attributes[key]['fig'] = go.Figure(data=go.Bar(
                 name=key,
@@ -28,9 +30,11 @@ def generate_graphs(attributes):
                     type='data',
                     symmetric=False,
                     array=value['pos_error'],
-                    arrayminus=value['neg_error'])), layout_yaxis_range=[attributes[key]['min_value_level'], attributes[key]['max_value_level']]) #, layout_margin=dict(l=50, r=50, t=50, b=50))
+                    arrayminus=value['neg_error'])), layout_yaxis_range=[attributes[key]['min_value_level'], attributes[key]['max_value_level']], layout_margin=dict(l=0, r=0, t=50, b=0), layout_font={'size': 22})
+            attributes[key]['fig'].update_xaxes(title_text = attributes[key]['x_label'], title_font = {'size': 22})
+            attributes[key]['fig'].update_yaxes(title_text = 'Likelihood', title_font = {'size': 22})
         
-        # attributes[key]['fig'].write_image('images/' + key.replace(' ', '_') + '.eps')
+        attributes[key]['fig'].write_image('images/' + key.replace(' ', '_') + '.eps', height=600)
 
     return attributes
 
