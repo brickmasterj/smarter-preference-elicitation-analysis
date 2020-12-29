@@ -36,7 +36,9 @@ weights_values = [v['weight'] for k, v in attributes.items()]
 weights_fig = go.Figure(data=[go.Pie(labels=weights_labels,
     values=weights_values,
     textinfo='label+percent',
-    insidetextorientation='radial')]) #, layout_margin=dict(l=50, r=50, t=50, b=50), layout_showlegend=False)
+    insidetextorientation='radial')],
+    layout_margin=dict(l=50, r=50, t=50, b=50),
+    layout_showlegend=False)
 
 # weights_fig.write_image('images/Ranks.eps')
 
